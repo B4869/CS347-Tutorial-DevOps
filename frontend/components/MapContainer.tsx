@@ -209,12 +209,9 @@ const MapContainer: React.FC = () => {
 
         {/* Sidebar */}
         <div className="w-96 bg-white rounded-lg shadow-lg overflow-y-auto p-6">
-          <h1 className="text-2xl font-bold mb-4 text-gray-800">
-            แผนที่ตำแหน่ง
-          </h1>
 
           {/* Form */}
-          <form onSubmit={handleAddMarker} className="mb-6 pb-6 border-b">
+          {/* <form onSubmit={handleAddMarker} className="mb-6 pb-6 border-b">
             <h2 className="text-lg font-semibold mb-4 text-gray-700">
               เพิ่มตำแหน่งใหม่
             </h2>
@@ -310,7 +307,7 @@ const MapContainer: React.FC = () => {
                 {message}
               </p>
             )}
-          </form>
+          </form> */}
 
           {/* Markers List */}
           <div>
