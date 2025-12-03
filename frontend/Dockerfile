@@ -3,18 +3,19 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# 1. Copy package files จากโฟลเดอร์ frontend
-COPY frontend/package*.json ./
+# 1. Copy package files
+COPY package*.json ./
 
 # 2. Install dependencies
 RUN npm ci --legacy-peer-deps
 
-# 3. Copy Source code ทั้งหมดจาก frontend
-COPY frontend/ .
+# 3. Copy Source code ทั้งหมด
+COPY . .
 
 # 4. Build (จะสร้างโฟลเดอร์ 'out' เพราะเราตั้งค่า output: 'export' แล้ว)
 RUN npm run build
 
+# Stage 2: Production with Nginx
 FROM nginx:1.27-alpine
 
 # (Optional) Copy custom nginx config ถ้าคุณสร้างไว้

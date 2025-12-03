@@ -22,19 +22,37 @@ const dockerItems = [
 ];
 
 export default function Home() {
-  const [apiData, setApiData] = useState<{
+  const [apiDataDemo, setApiDataDemo] = useState<{
     git?: { detail: string };
     docker?: { detail: string };
   }>({});
+  const [apiDataMyName, setApiDataMyName] = useState<{
+    code?: string;
+    name?: string;
+  }>({});
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
+  const fetchDataDemo = async () => {
     setLoading(true);
     try {
       // Using localhost:5000 as requested
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
       const response = await axios.get(`${apiUrl}/api/demo`);
-      setApiData(response.data);
+      setApiDataDemo(response.data);
+    } catch (error) {
+      console.error("API Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchDataMyName = async () => {
+    setLoading(true);
+    try {
+      // Using localhost:5000 as requested
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const response = await axios.get(`${apiUrl}/api/myname`);
+      setApiDataMyName(response.data);
     } catch (error) {
       console.error("API Error:", error);
     } finally {
@@ -43,7 +61,8 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchDataDemo();
+    fetchDataMyName();
   }, []);
 
   return (
@@ -91,10 +110,10 @@ export default function Home() {
         </div>
 
         {/* API Data from Backend */}
-        <div className="rounded-lg bg-white shadow-md">
+        <div className="rounded-lg bg-white shadow-md mb-6">
           <div className="p-4">
-            <div className="mb-2 text-xl font-medium text-gray-900">Data from Backend API</div>
-            
+            <div className="mb-2 text-xl font-medium text-gray-900">Data from Backend API | <span className="font-bold">Demo</span></div>
+
             {loading ? (
               <div className="flex justify-center py-8">
                 <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
@@ -103,11 +122,11 @@ export default function Home() {
               <div className="divide-y divide-gray-200 border-t border-gray-200">
                 <div className="py-3">
                   <div className="text-sm font-medium text-gray-900">Advanced Git</div>
-                  <div className="text-xs text-gray-500">{apiData.git?.detail || "No data"}</div>
+                  <div className="text-xs text-gray-500">{apiDataDemo.git?.detail || "No data"}</div>
                 </div>
                 <div className="py-3">
                   <div className="text-sm font-medium text-gray-900">Advanced Docker</div>
-                  <div className="text-xs text-gray-500">{apiData.docker?.detail || "No data"}</div>
+                  <div className="text-xs text-gray-500">{apiDataDemo.docker?.detail || "No data"}</div>
                 </div>
               </div>
             )}
@@ -115,7 +134,40 @@ export default function Home() {
             {!loading && (
               <div className="mt-4">
                 <button
-                  onClick={fetchData}
+                  onClick={fetchDataDemo}
+                  className="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                  Refresh Data
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="rounded-lg bg-white shadow-md">
+          <div className="p-4">
+            <div className="mb-2 text-xl font-medium text-gray-900">Data from Backend API | <span className="font-bold">My Name</span></div>
+
+            {loading ? (
+              <div className="flex justify-center py-8">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-200 border-t border-gray-200">
+                <div className="py-3">
+                  <div className="text-sm font-medium text-gray-900">Code</div>
+                  <div className="text-xs text-gray-500">{apiDataMyName.code || "No data"}</div>
+                </div>
+                <div className="py-3">
+                  <div className="text-sm font-medium text-gray-900">Name</div>
+                  <div className="text-xs text-gray-500">{apiDataMyName.name || "No data"}</div>
+                </div>
+              </div>
+            )}
+
+            {!loading && (
+              <div className="mt-4">
+                <button
+                  onClick={fetchDataMyName}
                   className="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
                   Refresh Data

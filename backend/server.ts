@@ -33,6 +33,16 @@ app.get('/api/demo', (req: Request, res: Response) => {
     });
 });
 
+app.get('/api/myname', (req: Request, res: Response) => {
+    const logMessage = `Request at ${new Date().toISOString()}: ${req.ip}\n`;
+    fs.appendFileSync(path.join(logsDir, 'access.log'), logMessage);
+
+    res.json({
+        code: "6604101319",
+        name: 'นายชัชวาลย์ อ้วนล่ำ',
+    });
+});
+
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
