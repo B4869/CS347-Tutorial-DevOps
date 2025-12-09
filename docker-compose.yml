@@ -3,6 +3,7 @@ version: '3.8'
 services:
   # Backend Service (Express + TypeScript)
   backend:
+    image: b4869/my-devops:backend_v1.0
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -27,6 +28,7 @@ services:
 
   # Frontend Service (Next.js + Nginx)
   frontend:
+    image: b4869/my-devops:frontend_v1.0
     build:
       context: ./frontend
       dockerfile: Dockerfile
