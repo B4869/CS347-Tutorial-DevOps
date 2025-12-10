@@ -31,14 +31,21 @@ export default function Home() {
     name?: string;
   }>({});
   const [loading, setLoading] = useState(true);
+  const [apiDataTasks, setApiDataTasks] = useState<{
+    id?: string;
+    title?: string;
+    description?: string;
+    createdAt?: string;
+    updatedAt?: string;
+  }[]>([]);
 
   const fetchDataDemo = async () => {
     setLoading(true);
     try {
       // Using localhost:5000 as requested
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      const response = await axios.get(`${apiUrl}/api/demo`);
-      setApiDataDemo(response.data);
+      // const response = await axios.get(`${apiUrl}/api/demo`);
+      // setApiDataDemo(response.data);
     } catch (error) {
       console.error("API Error:", error);
     } finally {
@@ -51,8 +58,22 @@ export default function Home() {
     try {
       // Using localhost:5000 as requested
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      const response = await axios.get(`${apiUrl}/api/myname`);
-      setApiDataMyName(response.data);
+      // const response = await axios.get(`${apiUrl}/api/myname`);
+      // setApiDataMyName(response.data);
+    } catch (error) {
+      console.error("API Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchDataTasks = async () => {
+    setLoading(true);
+    try {
+      // Using localhost:5000 as requested
+      const apiUrl = process.env.API_URL || "http://localhost:3000";
+      const response = await axios.get(`${apiUrl}/api/tasks`);
+      setApiDataTasks(response.data.data);
     } catch (error) {
       console.error("API Error:", error);
     } finally {
@@ -143,7 +164,7 @@ export default function Home() {
             )}
           </div>
         </div>
-        <div className="rounded-lg bg-white shadow-md">
+        <div className="rounded-lg bg-white shadow-md mb-6">
           <div className="p-4">
             <div className="mb-2 text-xl font-medium text-gray-900">Data from Backend API | <span className="font-bold">My Name</span></div>
 
@@ -168,6 +189,42 @@ export default function Home() {
               <div className="mt-4">
                 <button
                   onClick={fetchDataMyName}
+                  className="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                  Refresh Data
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="rounded-lg bg-white shadow-md">
+          <div className="p-4">
+            <div className="mb-2 text-xl font-medium text-gray-900">Data from Backend API | <span className="font-bold">Tasks</span></div>
+
+            {loading ? (
+              <div className="flex justify-center py-8">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+              </div>
+            ) : (
+              <div className="py-3">
+                {apiDataTasks.map((task: any) => (
+                  <div key={task.id}>
+                    <div className="divide-y divide-gray-200 border-t border-gray-200 mb-3"></div>
+                    <div className="text-sm font-medium text-gray-900">ID</div>
+                    <div className="text-xs text-gray-500 mb-2">{task.id || "No data"}</div>
+                    <div className="text-sm font-medium text-gray-900">Title</div>
+                    <div className="text-xs text-gray-500 mb-2">{task.title || "No data"}</div>
+                    <div className="text-sm font-medium text-gray-900">Description</div>
+                    <div className="text-xs text-gray-500 mb-2">{task.description || "No data"}</div>
+                    <div className="divide-y divide-gray-200 border-t border-gray-200 mt-3"></div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {!loading && (
+              <div className="mt-4">
+                <button
+                  onClick={fetchDataTasks}
                   className="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
                   Refresh Data
